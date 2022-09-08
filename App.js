@@ -25,12 +25,24 @@ import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { AppNavigator } from './navigation.component';
+import { ThemeContext } from './theme-context';
 
-export default () => (
-    <>
-        <IconRegistry icons={EvaIconsPack} />
-        <ApplicationProvider {...eva} theme={eva.light}>
-            <AppNavigator />
-        </ApplicationProvider>
-    </>
-);
+export default () => {
+    const [theme, setTheme] = React.useState('light');
+
+    const toggleTheme = () => {
+        const nextTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(nextTheme);
+    };
+
+    return (
+        <>
+            <ThemeContext.Provider value={{ theme, toggleTheme }}>
+                <IconRegistry icons={EvaIconsPack} />
+                <ApplicationProvider {...eva} theme={eva[theme]}>
+                    <AppNavigator />
+                </ApplicationProvider>
+            </ThemeContext.Provider>
+        </>
+    );
+};
